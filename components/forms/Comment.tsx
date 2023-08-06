@@ -1,6 +1,6 @@
 "use client";
 
-import * as z from "zod";
+import { z } from "zod";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { usePathname } from "next/navigation";
@@ -14,8 +14,8 @@ import {
     FormLabel,
 } from "@/components/ui/form";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 import { CommentValidation } from "@/lib/validations/thread";
 import { addCommentToThread } from "@/lib/actions/thread.actions";
@@ -26,7 +26,7 @@ interface Props {
     currentUserId: string;
 }
 
-const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
+function Comment({ threadId, currentUserImg, currentUserId }: Props) {
     const pathname = usePathname();
 
     const form = useForm<z.infer<typeof CommentValidation>>({
@@ -46,7 +46,6 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
 
         form.reset();
     };
-
 
     return (
         <Form {...form}>
@@ -82,6 +81,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
                 </Button>
             </form>
         </Form>
-    )
+    );
 }
+
 export default Comment;

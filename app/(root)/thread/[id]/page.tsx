@@ -1,11 +1,15 @@
-import ThreadCard from "@/components/cards/ThreadCard";
-import { fetchUser } from "@/lib/actions/user.actions";
-import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
-import { fetchThreadById } from "@/lib/actions/thread.actions";
-import Comment from "@/components/forms/Comment";
+import { currentUser } from "@clerk/nextjs";
 
-const Page = async ({ params }: { params: { id: string } }) => {
+import Comment from "@/components/forms/Comment";
+import ThreadCard from "@/components/cards/ThreadCard";
+
+import { fetchUser } from "@/lib/actions/user.actions";
+import { fetchThreadById } from "@/lib/actions/thread.actions";
+
+export const revalidate = 0;
+
+async function page({ params }: { params: { id: string } }) {
     if (!params.id) return null;
 
     const user = await currentUser();
@@ -17,7 +21,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
     const thread = await fetchThreadById(params.id);
 
     return (
-        <section className="relative">
+        <section className='relative'>
             <div>
                 <ThreadCard
                     id={thread._id}
@@ -30,10 +34,11 @@ const Page = async ({ params }: { params: { id: string } }) => {
                     comments={thread.children}
                 />
             </div>
+
             <div className='mt-7'>
                 <Comment
-                    threadId={thread.id}
-                    currentUserImg={userInfo.image}
+                    threadId={params.id}
+                    currentUserImg={user.imageUrl}
                     currentUserId={JSON.stringify(userInfo._id)}
                 />
             </div>
@@ -55,8 +60,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                 ))}
             </div>
         </section>
-
-    )
+    );
 }
 
-export default Page;
+export default page;
